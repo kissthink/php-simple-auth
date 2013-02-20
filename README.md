@@ -30,3 +30,9 @@ snippet directory.
 
 That's all! The library will take care of the redirects required and verifying 
 the username/password provided by the user.
+
+# License
+Licensed under the Apache License, Version 2.0;
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
