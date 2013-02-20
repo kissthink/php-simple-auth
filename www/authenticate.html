@@ -1,13 +1,32 @@
+<!DOCTYPE html>
 <html>
-  <head>
-    <title>SimpleAuth</title>
-  </head>
-  <body>
-    <h1>SimpleAuth</h1>
-    <form method="POST" action="verify.php">
-      <label>Username <input type="text" name="user"></label>
-      <label>Password <input type="password" name="pass"></label>
-      <input type="submit" value="Login">
-    </form>
-  </body>
+    <head>
+        <meta charset="utf-8">
+        <title>Authentication</title>
+
+        <link href="ext/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="ext/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet">
+
+        <style type="text/css">
+            body {
+                padding-top: 40px;
+            }
+            div.container {
+                width: 300px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container well well-small">
+            <form class="form" method="POST" action="verify.php">
+                <fieldset>
+                    <legend>Please sign in</legend>
+                    <input class="input-block-level" type="text" name="user" placeholder="Username">
+                    <input class="input-block-level" type="password" name="pass" placeholder="Password">
+                    <input class="btn btn-primary" type="submit" value="Login">
+                </fieldset>
+            </form>
+        </div>
+    </body>
 </html>

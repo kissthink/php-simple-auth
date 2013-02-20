@@ -28,6 +28,9 @@ This copies the `config/users.json.example` to `config/users.json` if the
 configuration snippet that you need to add to the Apache configuration
 snippet directory.
 
+To install Bootstrap you can use the included `docs/install_dependencies.sh`
+script.
+
 That's all! The library will take care of the redirects required and verifying 
 the username/password provided by the user.
 
