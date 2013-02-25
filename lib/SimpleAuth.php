@@ -29,13 +29,9 @@ class SimpleAuth
 
     public function authenticate()
     {
-        if (array_key_exists("simpleAuth", $_SESSION)) {
-            if ($_SESSION['simpleAuth']['success']) {
-                return $_SESSION["simpleAuth"]['userId'];
-            }
-            unset($_SESSION['simpleAuth']);
-            throw new SimpleAuthException("authentication failure");
-        } else {
+        if (array_key_exists("simpleAuth", $_SESSION) && array_key_exists("userId", $_SESSION["simpleAuth"])) {
+            return $_SESSION["simpleAuth"]['userId'];
+    } else {
             // no previous authentication attempt
             $_SESSION["simpleAuth"]["returnUri"] = self::getCallUri();
             $authUri = self::getAuthUri();
@@ -46,8 +42,6 @@ class SimpleAuth
 
     public function verify()
     {
-        var_export($_SERVER['REQUEST_METHOD']);
-
         if ("POST" !== $_SERVER['REQUEST_METHOD']) {
             // only POST is allowed
             header("HTTP/1.0 405 Method Not Allowed");
@@ -104,17 +98,10 @@ class SimpleAuth
             exit;
         }
 
-        $_SESSION['simpleAuth']['success'] = TRUE;
         $_SESSION['simpleAuth']['userId'] = $user;
 
         header("HTTP/1.1 302 Found");
         header("Location: " . $_SESSION['simpleAuth']['returnUri']);
-    }
-
-    // HELPER FUNCTIONS TO DETERMINE URLs
-    public static function getAudience()
-    {
-        return $_SERVER['SERVER_NAME'];
     }
 
     public static function getUri()
