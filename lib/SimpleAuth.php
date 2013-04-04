@@ -40,6 +40,22 @@ class SimpleAuth
         }
     }
 
+    public function isLoggedIn()
+    {
+        return isset($_SESSION['simpleAuth']['userId']);
+    }
+
+    public function logout()
+    {
+        if (isset($_SESSION['simpleAuth'])) {
+            unset($_SESSION['simpleAuth']);
+
+            return TRUE;
+        }
+
+        return FALSE;
+    }
+
     public function verify()
     {
         if ("POST" !== $_SERVER['REQUEST_METHOD']) {
