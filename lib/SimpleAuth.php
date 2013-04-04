@@ -29,9 +29,9 @@ class SimpleAuth
 
     public function authenticate()
     {
-        if (array_key_exists("simpleAuth", $_SESSION) && array_key_exists("userId", $_SESSION["simpleAuth"])) {
+        if (isset($_SESSION['simpleAuth']['userId'])) {
             return $_SESSION["simpleAuth"]['userId'];
-    } else {
+        } else {
             // no previous authentication attempt
             $_SESSION["simpleAuth"]["returnUri"] = self::getCallUri();
             $authUri = self::getAuthUri();
@@ -49,7 +49,7 @@ class SimpleAuth
             exit;
         }
 
-        if (!array_key_exists("simpleAuth", $_SESSION) || !array_key_exists("returnUri", $_SESSION["simpleAuth"])) {
+        if (!isset($_SESSION['simpleAuth']['returnUri'])) {
             // need to use the API
             header("HTTP/1.0 400 Bad Request");
             echo "[400] Bad Request (need to use the API)";
@@ -57,7 +57,7 @@ class SimpleAuth
         }
 
         // verify the login
-        if (!array_key_exists("user", $_POST) || !array_key_exists("pass", $_POST)) {
+        if (!isset($_POST['user']) || !isset($_POST['pass'])) {
             // required POST parameters not set
             header("HTTP/1.0 400 Bad Request");
             echo "[400] Bad Request (required POST parameters not set)";
@@ -84,7 +84,7 @@ class SimpleAuth
             exit;
         }
 
-        if (!array_key_exists($user, $usersData)) {
+        if (!isset($usersData[$user])) {
             // user does not exist
             header("HTTP/1.0 400 Bad Request");
             echo "[400] Bad Request (user does not exist)";
