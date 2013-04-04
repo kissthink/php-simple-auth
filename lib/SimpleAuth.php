@@ -22,22 +22,46 @@ class SimpleAuthException extends Exception
 
 class SimpleAuth
 {
+
     public function __construct()
     {
         session_start();
     }
 
-    public function authenticate()
+    public function userLogout($allSessions = TRUE) 
     {
-        if (array_key_exists("simpleAuth", $_SESSION) && array_key_exists("userId", $_SESSION["simpleAuth"])) {
-            return $_SESSION["simpleAuth"]['userId'];
-    } else {
-            // no previous authentication attempt
-            $_SESSION["simpleAuth"]["returnUri"] = self::getCallUri();
-            $authUri = self::getAuthUri();
-            header("Location: " . $authUri);
-            exit;
+        if (isset($_SESSION['simpleAuth'])) {
+            unset($_SESSION['simpleAuth']);
         }
+        header("Location: " . self::getCallUri());
+        exit;
+    }
+    
+    public function userChooser() 
+    {
+        $_SESSION['simpleAuth']['returnUri'] = self::getCallUri();
+        if (!isset($_SESSION['simpleAuth']['activeSessions']) || 0 === count($_SESSION['simpleAuth']['activeSessions'])) {
+            $this->userLogin();
+        } else {
+            // we have active sessions, display chooser
+            $chooserUri = self::getChooserUri();
+            header("Location: " . $chooserUri);
+            exit;            
+        }
+    }
+
+    public function userLogin()
+    {
+        if (isset($_SESSION['simpleAuth']['selectedUser']))
+            return $_SESSION['simpleAuth']['selectedUser'];
+        }
+        // no active sessions, display authentication form
+        $_SESSION['simpleAuth']['returnUri'] = self::getCallUri();
+        $_SESSION['simpleAuth']['activeSessions'] = array();
+
+        $authUri = self::getAuthUri();
+        header("Location: " . $authUri);
+        exit;
     }
 
     public function verify()
@@ -49,7 +73,7 @@ class SimpleAuth
             exit;
         }
 
-        if (!array_key_exists("simpleAuth", $_SESSION) || !array_key_exists("returnUri", $_SESSION["simpleAuth"])) {
+        if (!isset($_SESSION['simpleAuth']['returnUri'])) {
             // need to use the API
             header("HTTP/1.0 400 Bad Request");
             echo "[400] Bad Request (need to use the API)";
@@ -57,7 +81,7 @@ class SimpleAuth
         }
 
         // verify the login
-        if (!array_key_exists("user", $_POST) || !array_key_exists("pass", $_POST)) {
+        if (!isset($_POST['user']) || !isset($_POST['pass'])) {
             // required POST parameters not set
             header("HTTP/1.0 400 Bad Request");
             echo "[400] Bad Request (required POST parameters not set)";
@@ -84,7 +108,7 @@ class SimpleAuth
             exit;
         }
 
-        if (!array_key_exists($user, $usersData)) {
+        if (!isset($userData[$user])) {
             // user does not exist
             header("HTTP/1.0 400 Bad Request");
             echo "[400] Bad Request (user does not exist)";
@@ -98,8 +122,12 @@ class SimpleAuth
             exit;
         }
 
-        $_SESSION['simpleAuth']['userId'] = $user;
-
+        // successfully authenticated, add the user to the activeSessions
+        if(!in_array($user, $_SESSION['simpleAuth']['activeSessions'])) {
+            array_push($user, $_SESSION['simpleAuth']['activeSessions']);
+        }
+        $_SESSION['simpleAuth']['selectedUser'] = $user;
+                
         header("HTTP/1.1 302 Found");
         header("Location: " . $_SESSION['simpleAuth']['returnUri']);
     }
@@ -130,7 +158,18 @@ class SimpleAuth
         }
         $pathInfo = '/' . ltrim($pathInfo, '/');
 
-        return self::getUri() . $pathInfo . "/authenticate.html";
+        return self::getUri() . $pathInfo . "/authenticate.php";
     }
 
+    public static function getChooserUri()
+    {
+        $pathInfo = substr(dirname(__DIR__), strlen($_SERVER['DOCUMENT_ROOT']));
+        if (strpos($pathInfo, '?') !== FALSE) {
+            $pathInfo = substr_replace($pathInfo, '', strpos($pathInfo, '?'));
+        }
+        $pathInfo = '/' . ltrim($pathInfo, '/');
+
+        return self::getUri() . $pathInfo . "/chooser.php";
+    }
+    
 }
