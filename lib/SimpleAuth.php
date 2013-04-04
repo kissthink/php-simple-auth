@@ -42,11 +42,13 @@ class SimpleAuth
             if (!$this->_forceAuthn) {
                 return $_SESSION['simpleAuth']['userId'];
             } else {
+                // forceAuthn
                 if (isset($_SESSION['simpleAuth']['fresh'])) {
                     unset($_SESSION['simpleAuth']['fresh']);
 
                     return $_SESSION['simpleAuth']['userId'];
                 }
+                // authentication was not fresh, request new...
             }
         }
         // no previous authentication attempt
@@ -132,9 +134,8 @@ class SimpleAuth
 
         $_SESSION['simpleAuth']['userId'] = $user;
 
-        if (!$this->_forceAuthn) {
-            $_SESSION['simpleAuth']['fresh'] = TRUE;
-        }
+        // set freshness, in case forceAuthn is used in the API...
+        $_SESSION['simpleAuth']['fresh'] = TRUE;
 
         header("HTTP/1.1 302 Found");
         header("Location: " . $_SESSION['simpleAuth']['returnUri']);
