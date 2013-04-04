@@ -22,15 +22,24 @@ class SimpleAuthException extends Exception
 
 class SimpleAuth
 {
+
+    private $_forceAuthn;
+
     public function __construct()
     {
         session_start();
+        $this->forceAuthn(FALSE);
     }
 
-    public function authenticate($forceAuthn = FALSE)
+    public function forceAuthn($f)
+    {
+        $this->_forceAuthn = $f;
+    }
+
+    public function authenticate()
     {
         if (isset($_SESSION['simpleAuth']['userId'])) {
-            if (!$forceAuthn) {
+            if (!$this->_forceAuthn) {
                 return $_SESSION['simpleAuth']['userId'];
             } else {
                 if (isset($_SESSION['simpleAuth']['fresh'])) {
@@ -122,7 +131,10 @@ class SimpleAuth
         }
 
         $_SESSION['simpleAuth']['userId'] = $user;
-        $_SESSION['simpleAuth']['fresh'] = TRUE;
+
+        if (!$this->_forceAuthn) {
+            $_SESSION['simpleAuth']['fresh'] = TRUE;
+        }
 
         header("HTTP/1.1 302 Found");
         header("Location: " . $_SESSION['simpleAuth']['returnUri']);

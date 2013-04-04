@@ -34,6 +34,12 @@ script.
 That's all! The library will take care of the redirects required and verifying 
 the username/password provided by the user.
 
+# API
+The API has also the `logout()` method to log the user out of the application.
+In addition it is possible to force authentication, i.e.: force the user to
+type their username and password again. This can be done by calling the method
+`forceAuthn(TRUE)` on the `SimpleAuth` object.
+
 # License
 Licensed under the Apache License, Version 2.0;
 
