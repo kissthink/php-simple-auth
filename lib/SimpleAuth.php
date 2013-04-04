@@ -29,16 +29,22 @@ class SimpleAuth
 
     public function authenticate($forceAuthn = FALSE)
     {
+        if (isset($_SESSION['simpleAuth']['userId'])) {
+            if (!$forceAuthn) {
+                return $_SESSION['simpleAuth']['userId'];
+            } else {
+                if (isset($_SESSION['simpleAuth']['fresh'])) {
+                    unset($_SESSION['simpleAuth']['fresh']);
 
-        if (!$forceAuthn && isset($_SESSION['simpleAuth']['userId'])) {
-            return $_SESSION["simpleAuth"]['userId'];
-        } else {
-            // no previous authentication attempt
-            $_SESSION["simpleAuth"]["returnUri"] = self::getCallUri();
-            $authUri = self::getAuthUri();
-            header("Location: " . $authUri);
-            exit;
+                    return $_SESSION['simpleAuth']['userId'];
+                }
+            }
         }
+        // no previous authentication attempt
+        $_SESSION["simpleAuth"]["returnUri"] = self::getCallUri();
+        $authUri = self::getAuthUri();
+        header("Location: " . $authUri);
+        exit;
     }
 
     public function isLoggedIn()
@@ -116,6 +122,7 @@ class SimpleAuth
         }
 
         $_SESSION['simpleAuth']['userId'] = $user;
+        $_SESSION['simpleAuth']['fresh'] = TRUE;
 
         header("HTTP/1.1 302 Found");
         header("Location: " . $_SESSION['simpleAuth']['returnUri']);
