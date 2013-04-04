@@ -27,9 +27,10 @@ class SimpleAuth
         session_start();
     }
 
-    public function authenticate()
+    public function authenticate($forceAuthn = FALSE)
     {
-        if (isset($_SESSION['simpleAuth']['userId'])) {
+
+        if (!$forceAuthn && isset($_SESSION['simpleAuth']['userId'])) {
             return $_SESSION["simpleAuth"]['userId'];
         } else {
             // no previous authentication attempt
