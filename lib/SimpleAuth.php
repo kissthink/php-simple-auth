@@ -22,12 +22,15 @@ class SimpleAuthException extends Exception
 
 class SimpleAuth
 {
-
     private $_forceAuthn;
 
     public function __construct()
     {
-        session_start();
+        if ("" === session_id()) {
+            // no session currently exists, start a new one
+            session_set_cookie_params(0, "/", "", true, true);
+            session_start();
+        }
         $this->forceAuthn(FALSE);
     }
 
