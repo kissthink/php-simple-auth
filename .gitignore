@@ -1,2 +1,2 @@
-config/*.json
-www/ext/
+/config/*.json
+/www/ext

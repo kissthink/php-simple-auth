@@ -28,7 +28,7 @@ class SimpleAuth
     {
         if ("" === session_id()) {
             // no session currently exists, start a new one
-            session_set_cookie_params(0, "/", "", true, true);
+            //session_set_cookie_params(0, "/", "", true, true);
             session_start();
         }
         $this->forceAuthn(FALSE);
