@@ -136,7 +136,7 @@ class SimpleAuth
 
     public static function getAuthUri()
     {
-        $pathInfo = substr(dirname(__DIR__), strlen($_SERVER['DOCUMENT_ROOT']));
+        $pathInfo = substr(dirname(dirname(dirname(__DIR__))), strlen($_SERVER['DOCUMENT_ROOT']));
         if (strpos($pathInfo, '?') !== FALSE) {
             $pathInfo = substr_replace($pathInfo, '', strpos($pathInfo, '?'));
         }
@@ -148,7 +148,7 @@ class SimpleAuth
     private function verifyUserExists($user)
     {
         // read configuration file
-        $usersJson = @file_get_contents(dirname(__DIR__) . DIRECTORY_SEPARATOR . "config" . DIRECTORY_SEPARATOR . "users.json");
+        $usersJson = @file_get_contents(dirname(dirname(dirname(__DIR__))) . DIRECTORY_SEPARATOR . "config" . DIRECTORY_SEPARATOR . "users.json");
         if (FALSE === $usersJson) {
             // unable to read the users.json file
             header("HTTP/1.0 500 Internal Server Error");
