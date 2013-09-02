@@ -1,24 +1,22 @@
 <?php
 
 /**
-* Copyright 2013 François Kooman <fkooman@tuxed.net>
-*
-* Licensed under the Apache License, Version 2.0 (the "License");
-* you may not use this file except in compliance with the License.
-* You may obtain a copy of the License at
-*
-* http://www.apache.org/licenses/LICENSE-2.0
-*
-* Unless required by applicable law or agreed to in writing, software
-* distributed under the License is distributed on an "AS IS" BASIS,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-* See the License for the specific language governing permissions and
-* limitations under the License.
-*/
+ * Copyright 2013 François Kooman <fkooman@tuxed.net>
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
-class SimpleAuthException extends Exception
-{
-}
+namespace fkooman\SimpleAuth;
 
 class SimpleAuth
 {
@@ -42,6 +40,9 @@ class SimpleAuth
     public function authenticate()
     {
         if (isset($_SESSION['simpleAuth']['userId'])) {
+            // verify the logged in user still exists
+            $this->verifyUserExists($_SESSION['simpleAuth']['userId']);
+
             if (!$this->_forceAuthn) {
                 return $_SESSION['simpleAuth']['userId'];
             } else {
@@ -104,36 +105,7 @@ class SimpleAuth
         $user = $_POST['user'];
         $pass = $_POST['pass'];
 
-        // read configuration file
-        $usersJson = @file_get_contents(dirname(__DIR__) . DIRECTORY_SEPARATOR . "config" . DIRECTORY_SEPARATOR . "users.json");
-        if (FALSE === $usersJson) {
-            // unable to read the users.json file
-            header("HTTP/1.0 500 Internal Server Error");
-            echo "[500] Internal Server Error (unable to read the users.json file)";
-            exit;
-        }
-        // decode the JSON file
-        $usersData = json_decode($usersJson, TRUE);
-        if (!is_array($usersData)) {
-            // invalid JSON or no JSON
-            header("HTTP/1.0 500 Internal Server Error");
-            echo "[500] Internal Server Error (invalid JSON or no JSON)";
-            exit;
-        }
-
-        if (!isset($usersData[$user])) {
-            // user does not exist
-            header("HTTP/1.0 400 Bad Request");
-            echo "[400] Bad Request (user does not exist)";
-            exit;
-        }
-
-        if ($usersData[$user] !== $pass) {
-            // invalid password
-            header("HTTP/1.0 400 Bad Request");
-            echo "[400] Bad Request (invalid password)";
-            exit;
-        }
+        $this->verifyUser($user, $pass);
 
         $_SESSION['simpleAuth']['userId'] = $user;
 
@@ -173,4 +145,44 @@ class SimpleAuth
         return self::getUri() . $pathInfo . "/authenticate.html";
     }
 
+    private function verifyUserExists($user)
+    {
+        // read configuration file
+        $usersJson = @file_get_contents(dirname(__DIR__) . DIRECTORY_SEPARATOR . "config" . DIRECTORY_SEPARATOR . "users.json");
+        if (FALSE === $usersJson) {
+            // unable to read the users.json file
+            header("HTTP/1.0 500 Internal Server Error");
+            echo "[500] Internal Server Error (unable to read the users.json file)";
+            exit;
+        }
+        // decode the JSON file
+        $usersData = json_decode($usersJson, TRUE);
+        if (!is_array($usersData)) {
+            // invalid JSON or no JSON
+            header("HTTP/1.0 500 Internal Server Error");
+            echo "[500] Internal Server Error (invalid JSON or no JSON)";
+            exit;
+        }
+
+        if (!isset($usersData[$user])) {
+            // user does not exist
+            header("HTTP/1.0 400 Bad Request");
+            echo "[400] Bad Request (user does not exist)";
+            exit;
+        }
+
+        return $usersData;
+    }
+
+    private function verifyUser($user, $pass)
+    {
+        $usersData = $this->verifyUserExists($user);
+
+        if ($usersData[$user] !== $pass) {
+            // invalid password
+            header("HTTP/1.0 400 Bad Request");
+            echo "[400] Bad Request (invalid password)";
+            exit;
+        }
+    }
 }

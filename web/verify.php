@@ -16,6 +16,6 @@
 * limitations under the License.
 */
 
-require_once(dirname(__DIR__) . DIRECTORY_SEPARATOR . "lib" . DIRECTORY_SEPARATOR . "SimpleAuth.php");
-$simpleAuth = new SimpleAuth();
+require_once(dirname(__DIR__) . DIRECTORY_SEPARATOR . "vendor" . DIRECTORY_SEPARATOR . "autoload.php");
+$simpleAuth = new fkooman\SimpleAuth\SimpleAuth();
 $simpleAuth->verify();
