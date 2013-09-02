@@ -1,9 +1,9 @@
 {
-    "admin": "adm1n", 
-    "bmcatee": "ySVk4B9d", 
-    "jmatson": "8r5yyIV3", 
-    "jstroud": "xDIosd9j", 
-    "mcram": "62xX1Fid", 
-    "mwisdom": "LQ32xvaV", 
-    "teacher": "teach3r"
+    "admin@example.org": "adm1n", 
+    "bmcatee@example.org": "ySVk4B9d", 
+    "jmatson@example.org": "8r5yyIV3", 
+    "jstroud@example.org": "xDIosd9j", 
+    "mcram@example.org": "62xX1Fid", 
+    "mwisdom@example.org": "LQ32xvaV", 
+    "teacher@example.org": "teach3r"
 }
