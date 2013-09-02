@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Sign In</title>
+        <link href="css/style.css" rel="stylesheet">
+    </head>
+    <body>
+        <div class="container">
+            <h2>Sign In</h2>
+            <form method="POST" action="verify.php">
+                {% if hint %}
+                    <input class="form-control" type="text" name="user" value="{{ hint|e }}" disabled>
+                    <input type="hidden" name="user" value="{{ hint|e }}">
+                    <input class="form-control" type="password" name="pass" placeholder="Password" autofocus>
+                {% else %}
+                    <input class="form-control" type="text" name="user" placeholder="Username" autofocus>
+                    <input class="form-control" type="password" name="pass" placeholder="Password">
+                {% endif %}
+                <button type="submit">Sign in</button>
+            </form>
+        </div> <!-- /container -->
+    </body>
+</html>

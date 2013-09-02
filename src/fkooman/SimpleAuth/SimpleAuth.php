@@ -37,7 +37,7 @@ class SimpleAuth
         $this->_forceAuthn = $f;
     }
 
-    public function authenticate()
+    public function authenticate($userHint = null)
     {
         if (isset($_SESSION['simpleAuth']['userId'])) {
             // verify the logged in user still exists
@@ -58,7 +58,11 @@ class SimpleAuth
         // no previous authentication attempt
         $_SESSION["simpleAuth"]["returnUri"] = self::getCallUri();
         $authUri = self::getAuthUri();
-        header("Location: " . $authUri);
+        if (null !== $userHint) {
+            header(sprintf("Location: %s?user_hint=%s", $authUri, $userHint));
+        } else {
+            header(sprintf("Location: %s", $authUri));
+        }
         exit;
     }
 
@@ -142,7 +146,7 @@ class SimpleAuth
         }
         $pathInfo = '/' . ltrim($pathInfo, '/');
 
-        return self::getUri() . $pathInfo . "/authenticate.html";
+        return self::getUri() . $pathInfo . "/authenticate.php";
     }
 
     private function verifyUserExists($user)
