@@ -8,10 +8,10 @@
     <body>
         <div class="container">
             <h2>Sign In</h2>
+            <p>Please sign in with your username and password.</p>
             <form method="POST" action="verify.php">
                 {% if hint %}
-                    <input class="form-control" type="text" name="user" value="{{ hint|e }}" disabled>
-                    <input type="hidden" name="user" value="{{ hint|e }}">
+                    <input class="form-control" type="text" name="user" placeholder="Username" value="{{ hint|e }}">
                     <input class="form-control" type="password" name="pass" placeholder="Password" autofocus>
                 {% else %}
                     <input class="form-control" type="text" name="user" placeholder="Username" autofocus>

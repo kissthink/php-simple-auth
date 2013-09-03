@@ -44,3 +44,8 @@ Licensed under the Apache License, Version 2.0;
 
    http://www.apache.org/licenses/LICENSE-2.0
 
+# Artwork
+The background picture `web/img/background.jpg` was taken from 
+[daniele paccaloni](https://secure.flickr.com/photos/danielepaccaloni/4290964321/)
+licensed under Creative Commons 
+[CC BY-NC-ND 2.0](https://creativecommons.org/licenses/by-nc-nd/2.0/).
