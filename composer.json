@@ -15,6 +15,6 @@
     "name": "fkooman/php-simple-auth",
     "require": {
         "php": ">=5.3.3",
-        "twig/twig": "1.13.*"
+        "twig/twig": "1.14.*"
     }
 }
