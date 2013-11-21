@@ -1,15 +1,13 @@
 body {
     font-family: sans-serif;
-    background-image: url(../img/background.jpg);
-    background-repeat: no-repeat;
-    background-size: 100%;
     font-size: 85%;
+    background-color: #eee;
 }
 
 div.container {
     max-width: 400px;
     margin: 10% auto;
-    background-color: #eee;
+    background-color: #ddd;
     border: 2px #ccc solid;
     border-radius: 10px;
     opacity: 0.9;

@@ -1,9 +1,5 @@
 {
-    "admin@example.org": "adm1n", 
-    "bmcatee@example.org": "ySVk4B9d", 
-    "jmatson@example.org": "8r5yyIV3", 
-    "jstroud@example.org": "xDIosd9j", 
-    "mcram@example.org": "62xX1Fid", 
-    "mwisdom@example.org": "LQ32xvaV", 
-    "teacher@example.org": "teach3r"
+    "admin": "adm1n",
+    "student": "stud3nt",
+    "teacher": "teach3r"
 }
